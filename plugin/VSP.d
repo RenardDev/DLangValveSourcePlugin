@@ -60,7 +60,7 @@ public:
 };
 
 // ----------------------------------------------------------------
-// CreateInterfaceInternal
+// CreateInterface
 // ----------------------------------------------------------------
 
 void* CreateInterfaceInternal(const char* szName, int* pReturnCode) {
@@ -94,10 +94,6 @@ void* CreateInterfaceInternal(const char* szName, int* pReturnCode) {
 	return null;
 }
 
-// ----------------------------------------------------------------
-// CreateInterface
-// ----------------------------------------------------------------
-
 export extern(C) void* CreateInterface(const char* szName, int* pReturnCode) {
 	return CreateInterfaceInternal(szName, pReturnCode);
 }
@@ -127,7 +123,7 @@ extern(C++) interface IServerPluginCallbacks {
 	void OnQueryCvarValueFinished(int nCookie, void* pPlayerEdict, int nStatus, const char* pCVarName, const char* pCVarValue);
 	void OnEdictAllocated(void* pEdict);
 	void OnEdictFreed(const void* pEdict);
-};
+}
 
 // ----------------------------------------------------------------
 // ValveSourcePlugin
@@ -140,7 +136,7 @@ public:
 	}
 
 	~this() {
-		m_nCommandClientIndex = 0;
+		// Nothing...
 	}
 
 public:
@@ -230,22 +226,22 @@ public:
 
 private:
 	int m_nCommandClientIndex;
-};
+}
 
 // ----------------------------------------------------------------
 // Creating interface for VSP
 // ----------------------------------------------------------------
 
-extern(C) __gshared static IServerPluginCallbacks g_ValveSourcePlugin = new ValveSourcePlugin();
-
-extern(C) __gshared static void* GetPluginInterface() {
-	return cast(void*)(&g_ValveSourcePlugin.__vptr);
+extern(C) {
+	__gshared static IServerPluginCallbacks g_ValveSourcePlugin = new ValveSourcePlugin();
+	__gshared static InterfaceReg PluginReg = null;
+	static void* GetPluginInterface() {
+		return cast(void*)(&g_ValveSourcePlugin.__vptr);
+	}
 }
 
-extern(C) __gshared static InterfaceReg PluginReg = null;
-
 // ----------------------------------------------------------------
-// Main
+// Main (Windows)
 // ----------------------------------------------------------------
 
 version(Windows) {
