@@ -276,4 +276,9 @@ version(Windows) {
 
 		return true;
 	}
+} else {
+	this() {
+		// Plugin interface initialization
+		PluginReg = new InterfaceReg(cast(InstantiateInterfaceFn)(&GetPluginInterface), "ISERVERPLUGINCALLBACKS003");
+	}
 }
